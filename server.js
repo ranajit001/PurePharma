@@ -7,6 +7,7 @@ const cartRoutes = require('./routes/cartRoutes');
 const productRoutes = require('./routes/productRoutes');
 const medicineRoutes = require('./routes/medicineRoutes');
 const  cors = require('cors');
+const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -17,7 +18,7 @@ const http = require("http");
 const { Server } = require("socket.io");
 const { getMedicineResponse } = require('./chatAi');
 
-const app = express();
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: { origin: "*" },
