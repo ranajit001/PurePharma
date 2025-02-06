@@ -52,7 +52,7 @@ io.on('connection', (socket) => {
   socket.on('userMessage', async (message) => {
     try {
       // Append the user's message to the history
-      socket.conversationHistory.push(User: ${message});
+      socket.conversationHistory.push(`User: ${message}`);
 
       // Limit the history to the last 15 messages to prevent too much data
       if (socket.conversationHistory.length > 15) {
@@ -63,7 +63,7 @@ io.on('connection', (socket) => {
       const response = await getMedicineResponse(socket.conversationHistory, message);
 
       // Append the AI's response to the conversation history
-      socket.conversationHistory.push(AI: ${response});
+      socket.conversationHistory.push(`AI: ${response}`);
 
       // Send the response back to the specific user
       socket.emit('botResponse', response); // Make sure you use socket.emit
@@ -79,4 +79,4 @@ io.on('connection', (socket) => {
 });
 
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(Server running on port ${PORT}));
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
