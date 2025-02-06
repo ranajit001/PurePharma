@@ -29,7 +29,7 @@ io.on("connection", (socket) => {
           socket.conversationHistory.push(`User: ${message}`);
 
           // Limit the history to the last 10 messages to prevent too much data
-          if (socket.conversationHistory.length > 10) {
+          if (socket.conversationHistory.length > 15) {
               socket.conversationHistory.shift(); // Remove the oldest message
           }
 
