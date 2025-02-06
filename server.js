@@ -18,18 +18,41 @@ const io = new Server(server, {
   cors: { origin: "*" },
 });
 io.on("connection", (socket) => {
-    // console.log("User connected:", socket.id);
-  
-    socket.on("userMessage", async (message) => {
-      let response;
-      if(message === "hi" || message === "hii" ||message === "hello" || message === "hey"|| message == 'how are you') response = "Hello! i am health Bot. How are you feeling ?"
-       else response = await getMedicineResponse(message);
-      // console.log(response)
-      socket.emit("botResponse", response); // Send reply
-    });
-  
-    socket.on("disconnect", () => console.log("User disconnected:", socket.id));
+  console.log("User connected:", socket.id);
+
+  // Initialize conversation history for each user when they connect
+  socket.conversationHistory = [];
+
+  socket.on("userMessage", async (message) => {
+      try {
+          // Append the user's message to the history
+          socket.conversationHistory.push(`User: ${message}`);
+
+          // Limit the history to the last 10 messages to prevent too much data
+          if (socket.conversationHistory.length > 10) {
+              socket.conversationHistory.shift(); // Remove the oldest message
+          }
+
+          // Generate a response from the AI based on the current conversation history
+          const response = await getMedicineResponse(socket.conversationHistory, message);
+
+          // Append the AI's response to the conversation history
+          socket.conversationHistory.push(`AI: ${response}`);
+
+          // Send the response back to the specific user
+          socket.emit("botResponse", response);  // **Make sure you use `socket.emit`**
+
+      } catch (error) {
+          console.error("Chatbot error:", error);
+          socket.emit("botResponse", "Sorry, something went wrong.");
+      }
   });
+
+  socket.on("disconnect", () => {
+      console.log("User disconnected:", socket.id);
+  });
+});
+
 
 
 dotenv.config();
