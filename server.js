@@ -8,6 +8,11 @@ const productRoutes = require('./routes/productRoutes');
 const medicineRoutes = require('./routes/medicineRoutes');
 const  cors = require('cors');
 
+app.use(cors());
+app.use(bodyParser.json());
+
+
+
 const http = require("http"); 
 const { Server } = require("socket.io");
 const { getMedicineResponse } = require('./chatAi');
@@ -59,8 +64,7 @@ dotenv.config();
 connectDB();
 
 
-app.use(cors());
-app.use(bodyParser.json());
+
 app.use('/api/users', userRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/products', productRoutes);
