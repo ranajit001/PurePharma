@@ -15,8 +15,11 @@ const registerUser = async (req, res) => {
         });
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
+        console.log(`from user signup ${error}`)
     }
 };
+
+
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -33,6 +36,7 @@ const loginUser = async (req, res) => {
         }
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
+        console.log(`error from login user${error}`)
     }
 };
 
