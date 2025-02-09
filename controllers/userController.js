@@ -113,7 +113,7 @@ const sendResetEmail = async (req, res, next) => {
         );
 
         // Fix: Proper template literal syntax for reset link
-        const resetLink = https://online-pharmacy-jwkq.onrender.com/api/users/reset_password/${resetToken};
+        const resetLink = `https://online-pharmacy-jwkq.onrender.com/api/users/reset_password/${resetToken}`;
 
         // Configure mail transport
         const transporter = nodemailer.createTransport({
