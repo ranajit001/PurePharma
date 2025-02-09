@@ -1,32 +1,36 @@
 const UserModel = require('../models/User');
-
 const argon2 = require('argon2');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const dotenv = require('dotenv');
 dotenv.config();
-
 const path = require('path');
 
 const generateAccessToken = (user) => jwt.sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET);
-//const generateRefreshToken = (user) => jwt.sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '5h' });
 
 //signup
 const register = async (req, res, next) => {
     const { name, email, password, role } = req.body;
     try {
-        const userExists = await UserModel.findOne({ email });
-        if (userExists) return res.status(400).json({ message: 'User already exists' });
-        //hasing passwoed with argon2
-        const hash = await argon2.hash(password);
+        const userExists = await UserModel.findOne({ email: email.toLowerCase() });
+        if (userExists) {
+            console.log(`User already exists for email: ${email}`);
+            return res.status(400).json({ message: 'User already exists' });
+        }
 
-        const user = await UserModel.create({ name, email, password: hash });   //saving to mongo db
+        // Hashing password with argon2
+        const hash = await argon2.hash(password);
+        console.log(`Hashed Password: ${hash}`);
+
+        const user = await UserModel.create({ name, email: email.toLowerCase(), password: hash });
+        console.log(`User created with email: ${email}`);
+
         res.status(201).json({
-            // id: user.id, 
             name: user.name,
             email: user.email
-        });   //response sended
+        });
     } catch (error) {
+        console.error(`Error in register: ${error.message}`);
         error.message = `Error in register: ${error.message}`;
         next(error);
     }
@@ -36,36 +40,40 @@ const register = async (req, res, next) => {
 const login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
+        console.log(`Login attempt for email: ${email}`);
 
-        const user = await UserModel.findOne({ email });
+        const user = await UserModel.findOne({ email: email.toLowerCase() });
         if (!user) {
+            console.log(`User not found for email: ${email}`);
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
-        const hashedPassword = user.password; // Retrieve hashed password from DB
+        const hashedPassword = user.password;
+        console.log(`Hashed Password from DB: ${hashedPassword}`);
 
         const verify = await argon2.verify(hashedPassword, password);
+        console.log(`Password Verification Result: ${verify}`);
+
         if (!verify) {
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
-        //const accessToken = generateAccessToken(user);
-        const Token = generateRefreshToken(user);
+        const Token = generateAccessToken(user);
+        console.log(`Token generated for user: ${email}`);
 
         res.json({
             name: user.name,
             email: user.email,
-            //accessToken,
             Token
         });
-
     } catch (error) {
+        console.error(`Error in login: ${error.message}`);
         error.message = `Error in login: ${error.message}`;
         next(error);
     }
 };
 
-//generate new acess token if valid refresh token
+//generate new access token if valid refresh token
 const newAcsToken = async (req, res, next) => {
     try {
         // Extract token
@@ -85,8 +93,7 @@ const newAcsToken = async (req, res, next) => {
     }
 };
 
-//forgot passs token url getting route
-// UserRouter.post("/forget_password", UserEmailforPasswordResetToken)
+//forgot password token url getting route
 const sendResetEmail = async (req, res, next) => {
     try {
         const { email } = req.body;
@@ -97,7 +104,7 @@ const sendResetEmail = async (req, res, next) => {
             return res.status(404).send("User with this email does not exist");
         }
 
-        // Generate reset token (valid for 20 minutes)
+        // Generate reset token (valid for 10 minutes)
         const resetToken = jwt.sign({ userId: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: "10m" });
 
         const resetLink = `https://online-pharmacy-jwkq.onrender.com/api/users/reset_password/${resetToken}`;
@@ -114,12 +121,27 @@ const sendResetEmail = async (req, res, next) => {
 
         // Send email with the reset link
         await transporter.sendMail({
-            from: `"👋Support Team  <${process.env.NODE_MAILER_ADMIN_EMAI}>`,
-            to: email, // Send to the user requesting the reset
-            subject: "Password Reset Request",
-            text: `Click the link to reset your password: ${resetLink}, valid for 10 munite`,
-            // html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p><p>This link will expire in 10 minutes.</p>`,
+            from: `"👋 Support Team" <${process.env.NODE_MAILER_ADMIN_EMAIL}>`,
+            to: email, 
+            subject: "🔑 Password Reset Request",
+            html: `
+                <div style="font-family: Arial, sans-serif; color: #333;">
+                    <h2 style="color: #007bff;">🔐 Password Reset Request</h2>
+                    <p>Hello,</p>
+                    <p>You recently requested to reset your password. Click the button below to proceed:</p>
+                    <a href="${resetLink}" 
+                       style="display: inline-block; padding: 10px 20px; margin: 10px 0; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;">
+                        Reset Password
+                    </a>
+                    <p>Or you can copy and paste this link into your browser:</p>
+                    <p style="word-break: break-all; background: #f4f4f4; padding: 10px; border-radius: 5px;">${resetLink}</p>
+                    <p><b>Note:</b> This link is valid for <span style="color: red;">10 minutes</span>. If you did not request this, please ignore this email.</p>
+                    <br>
+                    <p>Best regards,<br><strong>Support Team</strong></p>
+                </div>
+            `,
         });
+        
 
         res.status(200).send("Password reset link sent to your email.");
     } catch (error) {
@@ -128,10 +150,6 @@ const sendResetEmail = async (req, res, next) => {
     }
 };
 
-// // this will be shown to clien after clicking on the email sended limk 
-// // BROWSER is always GET req
-
-// UserRouter.get("/reset_password/:token", UserPasswoedResetWebPage);
 //showing the new password input form
 const newPassget = (req, res, next) => {
     try {
@@ -144,7 +162,7 @@ const newPassget = (req, res, next) => {
     }
 };
 
-//    UserRouter.post("/reset_password/:token", USernewPasswordSave)
+//save new password
 const newPassPost = async (req, res, next) => {
     const { password } = req.body;
     try {
@@ -152,12 +170,11 @@ const newPassPost = async (req, res, next) => {
         var decoded = jwt.verify(token, process.env.JWT_SECRET);
         if (decoded) {
             const hashPass = await argon2.hash(password); //hash pass
-            await UserModel.findByIdAndUpdate(decoded.userId, { password: hashPass })
+            await UserModel.findByIdAndUpdate(decoded.userId, { password: hashPass });
 
-            res.send('Password Reset Successfull...!!!  Please login.');
-
+            res.send('Password Reset Successful! Please login.');
         } else {
-            res.send({ msg: "Please Try Agaian Later" })
+            res.send({ msg: "Please Try Again Later" });
         }
     } catch (e) {
         e.message = `Error in newPassPost: ${e.message}`;
