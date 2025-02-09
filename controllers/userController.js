@@ -100,7 +100,7 @@ const sendResetEmail = async (req, res, next) => {
         // Generate reset token (valid for 20 minutes)
         const resetToken = jwt.sign({ userId: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: "10m" });
 
-        const resetLink = `https://online-pharmacy-jwkq.onrender.com/user/reset_password/${resetToken}`;
+        const resetLink = `https://online-pharmacy-jwkq.onrender.com/api/users/reset_password/${resetToken}`;
         // Configure mail transport
         const transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
