@@ -93,28 +93,21 @@ const newAcsToken = async (req, res, next) => {
     }
 };
 
-
-
+//forgot password token url getting route
 const sendResetEmail = async (req, res, next) => {
     try {
         const { email } = req.body;
 
-        // Check if email exists
+        // Check if the email exists
         const user = await UserModel.findOne({ email });
         if (!user) {
-            return res.status(404).json({ message: "User with this email does not exist" });
+            return res.status(404).send("User with this email does not exist");
         }
 
         // Generate reset token (valid for 10 minutes)
-        const resetToken = jwt.sign(
-            { userId: user.id, email: user.email },
-            process.env.JWT_SECRET,
-            { expiresIn: "10m" }
-        );
+        const resetToken = jwt.sign({ userId: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: "10m" });
 
-        // Fix: Proper template literal syntax for reset link
         const resetLink = `https://online-pharmacy-jwkq.onrender.com/api/users/reset_password/${resetToken}`;
-
         // Configure mail transport
         const transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
@@ -126,10 +119,10 @@ const sendResetEmail = async (req, res, next) => {
             },
         });
 
-        // Send email with reset link
+        // Send email with the reset link
         await transporter.sendMail({
-            from: `👋 Support Team" <${process.env.NODE_MAILER_ADMIN_EMAIL}>`,
-            to: email,
+            from: `"👋 Support Team" <${process.env.NODE_MAILER_ADMIN_EMAIL}>`,
+            to: email, 
             subject: "🔑 Password Reset Request",
             html: `
                 <div style="font-family: Arial, sans-serif; color: #333;">
@@ -140,25 +133,22 @@ const sendResetEmail = async (req, res, next) => {
                        style="display: inline-block; padding: 10px 20px; margin: 10px 0; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;">
                         Reset Password
                     </a>
-                    <p>Or copy and paste this link into your browser:</p>
-                    <p style="word-break: break-word; background: #f4f4f4; padding: 10px; border-radius: 5px;">${resetLink}</p>
-                    <p><b>Note:</b> This link is valid for <span style="color: red;">10 minutes</span>. If you did not request this, ignore this email.</p>
+                    <p>Or you can copy and paste this link into your browser:</p>
+                    <p style="word-break: break-all; background: #f4f4f4; padding: 10px; border-radius: 5px;">${resetLink}</p>
+                    <p><b>Note:</b> This link is valid for <span style="color: red;">10 minutes</span>. If you did not request this, please ignore this email.</p>
                     <br>
                     <p>Best regards,<br><strong>Support Team</strong></p>
                 </div>
             `,
         });
+        
 
-        // Return JSON response
-        res.status(200).json({ message: "Password reset link sent to your email." });
-
+        res.status(200).send("Password reset link sent to your email.");
     } catch (error) {
-        console.error("Error in sendResetEmail:", error.message);
-        next({ message: `Error in sendResetEmail: ${error.message}` });
+        error.message = `Error in sendResetEmail: ${error.message}`;
+        next(error);
     }
 };
-
-
 
 //showing the new password input form
 const newPassget = (req, res, next) => {
