@@ -93,10 +93,7 @@ const newAcsToken = async (req, res, next) => {
     }
 };
 
-//forgot password token url getting route
-const jwt = require("jsonwebtoken");
-const nodemailer = require("nodemailer");
-const UserModel = require("../models/UserModel");
+
 
 const sendResetEmail = async (req, res, next) => {
     try {
