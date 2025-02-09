@@ -73,6 +73,30 @@ const login = async (req, res, next) => {
     }
 };
 
+//generate new access token if valid refresh token
+const newAcsToken = async (req, res, next) => {
+    try {
+        // Extract token
+        const refreshToken = req.headers.authorization?.split(' ')[1];
+        if (!refreshToken) return res.sendStatus(401); // No token provided
+
+        // Verify refresh token
+        const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
+
+        // Generate new access token
+        const accessToken = generateAccessToken({ id: decoded.userId, role: decoded.role });
+        res.status(200).json({ accessToken });
+
+    } catch (error) {
+        error.message = `Error in newAcsToken: ${error.message}`;
+        next(error);
+    }
+};
+
+//forgot password token url getting route
+const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
+const UserModel = require("../models/UserModel");
 
 const sendResetEmail = async (req, res, next) => {
     try {
@@ -92,7 +116,7 @@ const sendResetEmail = async (req, res, next) => {
         );
 
         // Fix: Proper template literal syntax for reset link
-        const resetLink = `https://online-pharmacy-jwkq.onrender.com/api/users/reset_password/${resetToken}`;
+        const resetLink = https://online-pharmacy-jwkq.onrender.com/api/users/reset_password/${resetToken};
 
         // Configure mail transport
         const transporter = nodemailer.createTransport({
@@ -107,7 +131,7 @@ const sendResetEmail = async (req, res, next) => {
 
         // Send email with reset link
         await transporter.sendMail({
-            from: `👋 Support Team <${process.env.NODE_MAILER_ADMIN_EMAIL}>`,
+            from: `👋 Support Team" <${process.env.NODE_MAILER_ADMIN_EMAIL}>`,
             to: email,
             subject: "🔑 Password Reset Request",
             html: `
