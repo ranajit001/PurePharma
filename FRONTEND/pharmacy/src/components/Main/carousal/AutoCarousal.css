@@ -1,0 +1,24 @@
+.carousal-slide{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+}
+
+.carousal-slide img{
+    height: 170px;
+    transition: height 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .carousal-slide img {
+        height: 130px;
+    }
+}
+
+/* For mobile devices */
+@media (max-width: 480px) {
+    .carousal-slide img {
+        height: 60px; 
+    }
+}
