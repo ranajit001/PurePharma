@@ -95,4 +95,13 @@ app.get("/test", (req, res) => {
 
 // Start Server
 const PORT = process.env.PORT || 5000;
+
+
+//swagger
+const swaggerUi = require('swagger-ui-express')
+const fs = require('fs');
+const swaggerDocument = JSON.parse(fs.readFileSync('./swagger.json', 'utf8'));  //corrct the path
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
