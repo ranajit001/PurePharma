@@ -81,16 +81,16 @@ PurePharma is a comprehensive solution for purchasing health and wellness produc
 
 ### Front-End
 
-- **Netlify**: ([https://6768f3ab44e08bdb6d2280c0--candid-mooncake-e8530d.netlify.app/](https://6768f3ab44e08bdb6d2280c0--candid-mooncake-e8530d.netlify.app/))
+- **Netlify**: ([https://6768f3ab44e08bdb6d2280c0--candid-mooncake-e8530d.netlify.app/](https://jovial-sundae-9b55ee.netlify.app/))
   - Features continuous deployment directly from the GitHub repository.
   - Deployed using optimized build settings for performance.
 
 ### Back-End
 
-- **Render**: ([https://the-backenders-043-1.onrender.com](https://the-backenders-043-1.onrender.com))
+- **Render**: ([https://the-backenders-043-1.onrender.com](https://online-pharmacy-jwkq.onrender.com))
   - Set up with environment variables for secure configuration.
   - Auto-deployment from the GitHub repository.
-  - For Code Please Refer to [https://github.com/strivendra002/The\_Backenders\_043](https://github.com/strivendra002/Epharma)
+
 
 ---
 
@@ -156,23 +156,10 @@ PurePharma is a comprehensive solution for purchasing health and wellness produc
 
 ---
 
-## Live Links
 
-- **Frontend (Netlify)**: ([https://6768f3ab44e08bdb6d2280c0--candid-mooncake-e8530d.netlify.app/](https://6768f3ab44e08bdb6d2280c0--candid-mooncake-e8530d.netlify.app/))
-- **Backend (Render)**: ([https://the-backenders-043-1.onrender.com](https://the-backenders-043-1.onrender.com))
 
----
 
-## Future Enhancements
 
-- Add payment gateway integration for seamless checkout.
-- Implement user profiles with order history.
-- Include product reviews and ratings.
-- Real-time order tracking with delivery notifications.
-- **Voice Search for products**.
-- **Integration with health tracking apps**.
-
----
 
 ## Contributing
 
@@ -205,6 +192,5 @@ Contributions are welcome! Follow these steps:
 
 ---
 
-Feel free to reach out for any queries or suggestions!
-GitHub: [https://github.com/strivendra002/EPharma](https://github.com/strivendra002/EPharma)
+
 
