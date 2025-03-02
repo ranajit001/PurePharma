@@ -81,13 +81,13 @@ PurePharma is a comprehensive solution for purchasing health and wellness produc
 
 ### Front-End
 
-- **Netlify**: ([https://6768f3ab44e08bdb6d2280c0--candid-mooncake-e8530d.netlify.app/](https://jovial-sundae-9b55ee.netlify.app/))
+- **Netlify**: ([[[https://the-backenders-043-1.onrender.com](https://jovial-sundae-9b55ee.netlify.app/)
   - Features continuous deployment directly from the GitHub repository.
   - Deployed using optimized build settings for performance.
 
 ### Back-End
 
-- **Render**: ([https://the-backenders-043-1.onrender.com](https://online-pharmacy-jwkq.onrender.com))
+- **Render**: ([[https://the-backenders-043-1.onrender.com](https://online-pharmacy-jwkq.onrender.com))
   - Set up with environment variables for secure configuration.
   - Auto-deployment from the GitHub repository.
 
