@@ -81,13 +81,13 @@ PurePharma is a comprehensive solution for purchasing health and wellness produc
 
 ### Front-End
 
-- **Netlify**: ([[[https://the-backenders-043-1.onrender.com](https://jovial-sundae-9b55ee.netlify.app/)
+- **Netlify**: ([https://jovial-sundae-9b55ee.netlify.app/](https://jovial-sundae-9b55ee.netlify.app/))
   - Features continuous deployment directly from the GitHub repository.
   - Deployed using optimized build settings for performance.
 
 ### Back-End
 
-- **Render**: ([[https://the-backenders-043-1.onrender.com](https://online-pharmacy-jwkq.onrender.com))
+- **Render**: ([https://online-pharmacy-jwkq.onrender.com](https://online-pharmacy-jwkq.onrender.com))
   - Set up with environment variables for secure configuration.
   - Auto-deployment from the GitHub repository.
 
@@ -103,29 +103,6 @@ PurePharma is a comprehensive solution for purchasing health and wellness produc
 
 ### Setup
 
-1. Clone the repository: for Frontend
-
-   ```bash
-   git clone https://github.com/strivendra002/EPharma/
-   ```
-
-2. Clone the repository: for Backend
-
-   ```bash
-   git clone https://github.com/strivendra002/EPharma/
-   ```
-
-3. Install dependencies:
-
-   ```bash
-   npm install
-   ```
-
-4. Start the server:
-
-   ```bash
-   npm start
-   ```
 
 ---
 
@@ -161,25 +138,6 @@ PurePharma is a comprehensive solution for purchasing health and wellness produc
 
 
 
-## Contributing
-
-Contributions are welcome! Follow these steps:
-
-1. Fork the repository.
-2. Create a new branch:
-   ```bash
-   git checkout -b feature-name
-   ```
-3. Commit your changes:
-   ```bash
-   git commit -m 'Add a meaningful message'
-   ```
-4. Push to the branch:
-   ```bash
-   git push origin feature-name
-   ```
-
----
 
 
 ---
@@ -189,8 +147,4 @@ Contributions are welcome! Follow these steps:
 - MongoDB for database support.
 - Netlify and Render for deployment platforms.
 - Open source libraries and tools used in this project.
-
----
-
-
 
