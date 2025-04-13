@@ -5,7 +5,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 async function getMedicineResponse(conversationHistory, userInput) {
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-002' });
 
         // Building the prompt with conversation history and user input
         const prompt = `
